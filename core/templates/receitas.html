@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    /* ── TÍTULO ── */
+    .titulo-pagina {
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    /* ── BOTÃO VOLTAR ── */
+    .btn-voltar-linha {
+        margin-bottom: 1.2rem;
+    }
+
+    .btn-voltar-linha a {
+        background-color: #ffcc00;
+        display: inline-block;
+        font-weight: 800;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #000;
+        border: 3px solid #000;
+        box-shadow: 5px 5px 0px #000;
+        font-size: 1rem;
+    }
+
+    /* ── CARD DE RECEITA ── */
+    .receita-card {
+        border: 4px solid #000;
+        border-radius: 25px;
+        background-color: #fff;
+        overflow: hidden;
+        height: 100%;
+        box-shadow: 8px 8px 0px #eee;
+    }
+
+    /* Desktop: imagem à esquerda, conteúdo à direita */
+    .receita-inner {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+    }
+
+    .receita-foto {
+        width: 33%;
+        flex-shrink: 0;
+        background-color: #f1f1f1;
+        border-right: 4px solid #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+    }
+
+    .receita-foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .receita-conteudo {
+        flex: 1;
+        padding: 20px;
+    }
+
+    /* ── CELULAR: imagem em cima, conteúdo embaixo ── */
+    @media (max-width: 600px) {
+        /* Cabeçalho: desfaz o position absolute no celular */
+        .position-relative.d-flex {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 10px !important;
+            min-height: unset !important;
+        }
+        .position-relative.d-flex .position-absolute {
+            position: static !important;
+            box-shadow: 3px 3px 0px #000 !important;
+        }
+        .position-relative.d-flex .position-absolute a {
+            font-size: 0.75rem !important;
+            padding: 6px 12px !important;
+        }
+        .position-relative.d-flex .page-title {
+            font-size: 1.8rem !important;
+            padding: 10px 20px !important;
+            align-self: center !important;
+        }
+
+        .scroll-container {
+            max-height: none !important;
+            overflow-y: visible !important;
+        }
+
+        .receita-inner {
+            flex-direction: column !important;
+        }
+
+        .receita-foto {
+            width: 100% !important;
+            height: 160px !important;
+            min-height: unset !important;
+            border-right: none !important;
+            border-bottom: 3px solid #000 !important;
+            overflow: hidden !important;
+        }
+
+        .receita-foto img {
+            height: 160px !important;
+            object-fit: cover !important;
+        }
+
+        .receita-conteudo {
+            padding: 14px !important;
+        }
+
+        .receita-nome {
+            font-size: 1.1rem !important;
+            margin-bottom: 8px !important;
+        }
+
+        .ingrediente-item {
+            font-size: 0.9rem !important;
+            padding: 6px 0 !important;
+        }
+
+        .qtd-tecnica { font-size: 0.85rem !important; }
+        .medida-caseira { font-size: 0.85rem !important; }
+    }
+</style>
+
+<!-- CABEÇALHO -->
+<div class="d-flex align-items-center justify-content-center mb-4 position-relative" style="min-height: 60px;">
+    <h2 class="page-title m-0 text-center">📖 Livro de Receitas</h2>
+    <div class="position-absolute start-0" style="box-shadow: 6px 6px 0px #000; border: 3px solid #000; border-radius: 12px;">
+        <a href="{% url 'home' %}" style="background-color: #ffcc00;" class="btn fw-bold shadow-sm p-3 px-4">
+            ⬅ VOLTAR
+        </a>
+    </div>
+</div>
+
+<!-- RECEITAS: 2 colunas no desktop, 1 no celular -->
+<div class="scroll-container">
+    <div class="row g-4">
+        {% for receita in receitas %}
+        <div class="col-12 col-xl-6">
+            <div class="receita-card">
+                <div class="receita-inner">
+                    <div class="receita-foto">
+                        {% if receita.imagem %}
+                            <img src="{{ receita.imagem.url }}" alt="{{ receita.nome_receita }}">
+                        {% else %}
+                            <span class="fw-bold text-muted">SEM FOTO</span>
+                        {% endif %}
+                    </div>
+                    <div class="receita-conteudo">
+                        <div class="receita-nome">{{ receita.nome_receita }}</div>
+                        <h6 class="fw-bold text-dark mb-3">🛒 Ingredientes Necessários:</h6>
+                        <div class="ingrediente-lista">
+                            {% for item in receita.ingredientes.all %}
+                            <li class="ingrediente-item">
+                                <span class="check-icon">●</span>
+                                <div>
+                                    <span class="qtd-tecnica">{{ item.qtd }}{{ item.insumo.und_medida }}</span>
+                                    <span>de {{ item.insumo.nome_insumo }}</span>
+                                    <span class="medida-caseira">({{ item.medida_caseira }})</span>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <div class="alert alert-warning border-dark fw-bold py-5">
+                <h3>NENHUMA RECEITA ENCONTRADA.</h3>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

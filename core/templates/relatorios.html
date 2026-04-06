@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    /* ── TÍTULO E VOLTAR (Mantendo seu estilo) ── */
+    .titulo-pagina { text-align: center; margin-bottom: 12px; }
+    .btn-voltar-linha { margin-bottom: 1.2rem; }
+    .btn-voltar-linha a {
+        background-color: #ffcc00; display: inline-block; font-weight: 800;
+        padding: 10px 20px; border-radius: 10px; text-decoration: none;
+        color: #000; border: 3px solid #000; box-shadow: 5px 5px 0px #000;
+    }
+
+    /* ── NOVOS CARDS FINANCEIROS ── */
+    .resumo-financeiro {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .card-financeiro {
+        padding: 15px;
+        border: 3px solid #000;
+        border-radius: 12px;
+        box-shadow: 5px 5px 0px #000;
+        text-align: center;
+    }
+
+    .card-faturamento { background-color: #e0f7fa; }
+    .card-custos { background-color: #fff3e0; }
+    .card-perdas { background-color: #ffebee; color: #c62828; }
+    .card-lucro { background-color: #e8f5e9; color: #2e7d32; }
+
+    .card-financeiro h3 { font-weight: 900; margin: 0; font-size: 1.4rem; }
+    .card-financeiro span { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+
+    /* Estilos das tabelas e abas (seus estilos originais) */
+    .filtro-container { background: #f8f9fa; padding: 20px; border: 3px solid #000; border-radius: 12px; margin-bottom: 20px; }
+    .btn-buscar { background: #000; color: #fff; font-weight: 800; border: none; border-radius: 8px; }
+    
+    @media (max-width: 600px) {
+        .resumo-financeiro { grid-template-columns: 1fr 1fr; }
+    }
+</style>
+
+<div class="titulo-pagina">
+    <h2 class="page-title m-0">📊 Relatórios de Gestão</h2>
+</div>
+
+<div class="btn-voltar-linha">
+    <a href="{% url 'home' %}">⬅ VOLTAR</a>
+</div>
+
+<div class="filtro-container">
+    <form method="GET" class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">📅 Início</label>
+            <input type="date" name="data_inicio" class="form-control form-control-lg" required value="{{ request.GET.data_inicio }}">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">📅 Fim</label>
+            <input type="date" name="data_fim" class="form-control form-control-lg" required value="{{ request.GET.data_fim }}">
+        </div>
+        <div class="col-md-4 d-grid">
+            <label class="form-label d-none d-md-block">&nbsp;</label>
+            <button type="submit" class="btn btn-buscar">🔍 VER RELATÓRIO</button>
+        </div>
+    </form>
+</div>
+
+{% if faturamento or custos or perdas %}
+<div class="resumo-financeiro">
+    <div class="card-financeiro card-faturamento">
+        <span>💰 Faturamento</span>
+        <h3>R$ {{ faturamento|floatformat:2 }}</h3>
+    </div>
+    <div class="card-financeiro card-custos">
+        <span>📉 Custos (Insumos)</span>
+        <h3>R$ {{ custos|floatformat:2 }}</h3>
+    </div>
+    <div class="card-financeiro card-perdas">
+        <span>⚠️ Perdas (Vencidos)</span>
+        <h3>R$ {{ perdas|floatformat:2 }}</h3>
+    </div>
+    <div class="card-financeiro card-lucro" style="background-color: {% if lucro >= 0 %}#e8f5e9{% else %}#ffebee{% endif %};">
+        <span>💎 Lucro Líquido</span>
+        <h3>R$ {{ lucro|floatformat:2 }}</h3>
+    </div>
+</div>
+{% endif %}
+
+<ul class="nav nav-tabs d-flex" id="relatorioTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="prod-tab" data-bs-toggle="tab" data-bs-target="#prod" type="button">🏭 Produções</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="vendas-tab" data-bs-toggle="tab" data-bs-target="#vendas" type="button">💰 Vendas</button>
+    </li>
+</ul>
+
+<div class="tab-content scroll-relatorio mt-0" id="relatorioTabContent">
+    <div class="tab-pane fade show active p-3 bg-white border border-dark border-top-0 rounded-bottom" id="prod">
+        {% if producoes %}
+        <table class="table table-acessivel table-hover">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Receita</th>
+                    <th>Qtd</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in producoes %}
+                <tr>
+                    <td>{{ p.data_inicio|date:"d/m/Y" }}</td>
+                    <td class="text-primary">{{ p.receita.nome_receita }}</td>
+                    <td>{{ p.qtd_produzida|default:"0" }} un.</td>
+                    <td>
+                        {% if p.qtd_produzida %}
+                            <span class="status-badge bg-success text-white">Pronto</span>
+                        {% else %}
+                            <span class="status-badge bg-warning text-dark">Fazendo</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-center py-5 fw-bold text-muted">Nenhuma produção no período.</p>
+        {% endif %}
+    </div>
+
+    <div class="tab-pane fade p-3 bg-white border border-dark border-top-0 rounded-bottom" id="vendas">
+        {% if vendas %}
+        <table class="table table-acessivel table-hover">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Método</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in vendas %}
+                <tr>
+                    <td>{{ v.data_venda|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        {% if v.metodo_pagamento == 'PIX' %}
+                            <span class="badge bg-info text-dark">💎 PIX</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">💵 Dinheiro</span>
+                        {% endif %}
+                    </td>
+                    <td class="fs-5 text-success fw-black">R$ {{ v.total_venda|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-center py-5 fw-bold text-muted">Nenhuma venda no período.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

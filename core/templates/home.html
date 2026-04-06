@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+        max-width: 1100px;
+        margin: 50px auto 0;
+    }
+
+    .btn-acessivel {
+        background-color: #ffcc00;
+        border: 4px solid #000000;
+        border-radius: 20px;
+        color: #000000;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 45px 10px;
+        transition: transform 0.2s, background-color 0.2s;
+        box-shadow: 0 8px 0px #b28f00;
+    }
+
+    .btn-acessivel:active {
+        transform: translateY(4px);
+        box-shadow: 0 4px 0px #b28f00;
+    }
+
+    .btn-acessivel:hover {
+        background-color: #ffe066;
+        color: #000;
+    }
+
+    .btn-acessivel img {
+        width: 70px;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .btn-text {
+        font-size: 1.4rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* TABLET (≤ 992px) */
+    @media (max-width: 992px) {
+        .menu-grid {
+            gap: 16px;
+            margin-top: 30px;
+        }
+        .btn-acessivel {
+            padding: 30px 10px;
+        }
+        .btn-acessivel img {
+            width: 55px;
+        }
+        .btn-text {
+            font-size: 1.1rem;
+        }
+    }
+
+    /* CELULAR (≤ 600px) */
+    @media (max-width: 600px) {
+
+        /* Título da navbar sem corte */
+        .navbar-brand {
+            font-size: 0.95rem !important;
+            white-space: normal !important;
+            text-align: center !important;
+            line-height: 1.3 !important;
+            padding: 4px 0 !important;
+        }
+
+        /* Grid ocupa toda a altura disponível */
+        .menu-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+            max-width: 100%;
+            min-height: calc(100dvh - 130px);
+            align-content: stretch;
+        }
+
+        /* Botões crescem para preencher o espaço */
+        .btn-acessivel {
+            padding: 0;
+            border-radius: 16px;
+            border-width: 3px;
+            box-shadow: 0 5px 0px #b28f00;
+            min-height: 140px;
+        }
+
+        .btn-acessivel img {
+            width: 52px;
+            margin-bottom: 10px;
+        }
+
+        .btn-text {
+            font-size: 1rem;
+            letter-spacing: 0;
+        }
+    }
+</style>
+
+<div class="menu-grid">
+    <a href="{% url 'insumos_list' %}" class="btn-acessivel">
+        <img src="../static/icons/insumos.png" alt="">
+        <span class="btn-text">Insumos</span>
+    </a>
+    <a href="{% url 'compras_list' %}" class="btn-acessivel">
+        <img src="../static/icons/compras.png" alt="">
+        <span class="btn-text">Compras</span>
+    </a>
+    <a href="{% url 'receitas_list' %}" class="btn-acessivel">
+        <img src="../static/icons/receitas.png" alt="">
+        <span class="btn-text">Receitas</span>
+    </a>
+    <a href="{% url 'producao_list' %}" class="btn-acessivel">
+        <img src="../static/icons/producao.png" alt="">
+        <span class="btn-text">Produção</span>
+    </a>
+    <a href="{% url 'venda_view' %}" class="btn-acessivel">
+        <img src="../static/icons/venda.png" alt="">
+        <span class="btn-text">Venda</span>
+    </a>
+    <a href="{% url 'relatorios' %}" class="btn-acessivel">
+        <img src="../static/icons/relatorio.png" alt="">
+        <span class="btn-text">Relatórios</span>
+    </a>
+</div>
+
+{% endblock %}

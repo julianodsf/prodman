@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    /* ── TÍTULO ── */
+    .titulo-pagina {
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    /* ── BOTÃO VOLTAR ── */
+    .btn-voltar-linha {
+        margin-bottom: 1.2rem;
+    }
+
+    .btn-voltar-linha a {
+        background-color: #ffcc00;
+        display: inline-block;
+        font-weight: 800;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #000;
+        border: 3px solid #000;
+        box-shadow: 5px 5px 0px #000;
+        font-size: 1rem;
+    }
+
+    @media (max-width: 600px) {
+        .titulo-pagina .page-title {
+            font-size: 2rem !important;
+            padding: 10px 20px !important;
+        }
+
+        .btn-voltar-linha a {
+            font-size: 0.75rem !important;
+            padding: 6px 12px !important;
+            box-shadow: 3px 3px 0px #000 !important;
+            border-width: 2px !important;
+        }
+
+        .scroll-area {
+            max-height: none !important;
+            overflow-y: visible !important;
+        }
+
+        /* Botão nova produção ocupa largura toda */
+        .btn-produzir-topo {
+            width: 100% !important;
+            font-size: 1.1rem !important;
+            padding: 12px !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Card pendente vira coluna */
+        .card-pendente {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+        }
+
+        .card-pendente .text-end {
+            width: 100% !important;
+            text-align: left !important;
+            margin-top: 0 !important;
+        }
+
+        .btn-finalizar {
+            width: 100% !important;
+            text-align: center !important;
+            font-size: 1rem !important;
+        }
+
+        .prod-img {
+            width: 70px !important;
+            height: 70px !important;
+        }
+
+        .info-principal { font-size: 1.1rem !important; }
+        .info-detalhe { font-size: 0.9rem !important; }
+
+        .section-header {
+            font-size: 0.95rem !important;
+            padding: 8px 14px !important;
+            white-space: normal !important;
+        }
+    }
+</style>
+
+<!-- TÍTULO -->
+<div class="titulo-pagina">
+    <h2 class="page-title m-0">🏭 Produção</h2>
+</div>
+
+<!-- VOLTAR -->
+<div class="btn-voltar-linha">
+    <a href="{% url 'home' %}">⬅ VOLTAR</a>
+</div>
+
+<div class="scroll-area">
+    <h3 class="section-header">⏳ Pendentes (Fazer Agora)</h3>
+    <a href="{% url 'producao_nova' %}" class="btn btn-produzir-topo">+ NOVA PRODUÇÃO</a>
+
+    <div class="mt-3">
+        {% for prod in pendentes %}
+        <div class="card-pendente d-flex justify-content-between align-items-center flex-wrap">
+            <div class="d-flex align-items-center">
+                {% if prod.receita.imagem %}
+                    <img src="{{ prod.receita.imagem.url }}" width="100" height="100" class="prod-img me-4">
+                {% endif %}
+                <div>
+                    <div class="info-principal">{{ prod.receita.nome_receita }}</div>
+                    <div class="info-detalhe">
+                        🍪 Produto: <span class="text-primary">{{ prod.receita.produto.nome_produto }}</span><br>
+                        📦 Lotes Planejados: <span class="badge bg-dark fs-6">{{ prod.qtd_da_receita }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-end mt-3 mt-md-0">
+                <a href="{% url 'producao_finalizar' prod.id_producao %}" class="btn btn-finalizar">✔️ FINALIZAR</a>
+            </div>
+        </div>
+        {% endfor %}
+        {% if not pendentes %}
+        <div class="alert alert-light border-dark text-center fw-bold">Nenhuma produção pendente no momento.</div>
+        {% endif %}
+    </div>
+
+    <h3 class="section-header" style="background-color: #e9ecef; color: #666;">✅ Finalizadas (Concluídas)</h3>
+    <div class="mt-3">
+        {% for prod in finalizadas %}
+        <div class="card-finalizada d-flex align-items-center">
+            {% if prod.receita.imagem %}
+                <img src="{{ prod.receita.imagem.url }}" width="50" height="50" class="rounded me-3 border border-secondary">
+            {% endif %}
+            <div>
+                <strong class="fs-5">{{ prod.receita.nome_receita }}</strong><br>
+                <span class="text-muted fw-bold">Qtd Produzida: {{ prod.qtd_produzida }} unidades</span>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted ms-3">Nenhuma produção finalizada hoje.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

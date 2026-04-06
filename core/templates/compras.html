@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    /* ── TÍTULO CENTRALIZADO ── */
+    .titulo-pagina {
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    /* ── BOTÃO VOLTAR ── */
+    .btn-voltar-linha {
+        margin-bottom: 1.2rem;
+    }
+
+    .btn-voltar-linha a {
+        background-color: #ffcc00;
+        display: inline-block;
+        font-weight: 800;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #000;
+        border: 3px solid #000;
+        box-shadow: 5px 5px 0px #000;
+        font-size: 1rem;
+    }
+
+    @media (max-width: 600px) {
+        .titulo-pagina .page-title {
+            font-size: 1.4rem !important;
+            padding: 10px 20px !important;
+        }
+        .btn-voltar-linha a {
+            font-size: 0.75rem !important;
+            padding: 6px 12px !important;
+            box-shadow: 3px 3px 0px #000 !important;
+            border-width: 2px !important;
+        }
+
+        /* Accordion compacto */
+        .scroll-container {
+            max-height: none !important;
+            overflow-y: visible !important;
+        }
+        .accordion-button {
+            font-size: 0.9rem !important;
+            padding: 12px 10px !important;
+        }
+        .compra-info {
+            flex-direction: column !important;
+            gap: 6px !important;
+        }
+        .badge-nf {
+            font-size: 0.8rem !important;
+            padding: 4px 8px !important;
+        }
+        .total-valor {
+            font-size: 0.8rem !important;
+            padding: 4px 8px !important;
+        }
+        /* Tabela interna compacta */
+        .table-acessivel {
+            font-size: 0.78rem !important;
+        }
+        .table-acessivel thead th,
+        .table-acessivel tbody td {
+            padding: 6px 4px !important;
+        }
+    }
+</style>
+
+<!-- TÍTULO -->
+<div class="titulo-pagina">
+    <h2 class="page-title m-0">🧾 Registro de Compras</h2>
+</div>
+
+<!-- VOLTAR -->
+<div class="btn-voltar-linha">
+    <a href="{% url 'home' %}">⬅ VOLTAR</a>
+</div>
+
+<!-- ACCORDION -->
+<div class="scroll-container">
+    <div class="accordion" id="accordionCompras">
+        {% for compra in compras %}
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ compra.id_compra }}">
+                    <div class="compra-info">
+                        <span>
+                            <span class="badge-nf">NF: {{ compra.nota_fiscal }}</span>
+                            <strong class="ms-2">{{ compra.data_nf|date:"d/m/Y" }}</strong>
+                        </span>
+                        <span class="total-valor">TOTAL: R$ {{ compra.total_compra }}</span>
+                    </div>
+                </button>
+            </h2>
+            <div id="collapse{{ compra.id_compra }}" class="accordion-collapse collapse" data-bs-parent="#accordionCompras">
+                <div class="accordion-body bg-white">
+                    <div class="table-responsive">
+                        <table class="table table-acessivel">
+                            <thead>
+                                <tr>
+                                    <th>Insumo</th>
+                                    <th>Qtd</th>
+                                    <th>Peso/Cont.</th>
+                                    <th>Und.</th>
+                                    <th>Preço Unit.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in compra.itens.all %}
+                                <tr>
+                                    <td><span class="text-primary">●</span> {{ item.insumo.nome_insumo }}</td>
+                                    <td>{{ item.qtd_item_compra }}</td>
+                                    <td>{{ item.peso_cont }}</td>
+                                    <td>{{ item.und_medida }}</td>
+                                    <td class="fw-bold text-dark">R$ {{ item.preco_unitario }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-warning border-dark text-center fw-bold py-5">
+            <h3>NENHUMA COMPRA REGISTRADA.</h3>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,719 @@
+/* BASE */
+body {
+    background-color: #ffffff;
+    font-family: 'Lexend', sans-serif;
+}
+
+/* Navbar com as cores oficiais e contraste */
+.navbar {
+    background-color: #004a99 !important;
+    border-bottom: 5px solid #ffcc00;
+    margin-bottom: 2rem;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+/* Mensagens de Alerta Robustas */
+.alert {
+    font-weight: bold;
+    border: 3px solid black;
+    text-align: center;
+}
+
+/* COMPRAS */
+.page-title {
+    background-color: #004a99;
+    color: white;
+    display: inline-block;
+    padding: 10px 30px;
+    border-radius: 50px;
+    border: 4px solid #ffcc00;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+/* Estilização do Accordion Acessível */
+.accordion-item {
+    border: 4px solid #000 !important;
+    border-radius: 15px !important;
+    margin-bottom: 15px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0px #ccc;
+}
+
+.accordion-button {
+    background-color: #ffffff !important;
+    color: #000 !important;
+    font-size: 1.2rem;
+    padding: 20px;
+}
+
+/* Quando o botão de compra é clicado, ele fica amarelo forte */
+.accordion-button:not(.collapsed) {
+    background-color: #ffcc00 !important;
+    box-shadow: none;
+    border-bottom: 4px solid #000;
+}
+
+.compra-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.badge-nf {
+    background-color: #000;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.total-valor {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 8px;
+    border: 2px solid #000;
+    font-weight: 900;
+}
+
+/* Tabela dentro do Accordion */
+.table-acessivel {
+    font-size: 1.1rem;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+
+.table-acessivel thead th {
+    background-color: #e9ecef;
+    border-bottom: 3px solid #000;
+    color: #000;
+    text-transform: uppercase;
+}
+
+.table-acessivel tbody td {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    vertical-align: middle;
+    font-weight: 600;
+}
+
+/* Container com scroll para caber na tela */
+.scroll-container {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* HOME */
+/* Grid que se ajusta para caber na tela sem rolar */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    max-width: 1100px;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+@media (max-width: 768px) {
+    .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}
+
+/* Botão Amarelo de Alto Contraste */
+.btn-acessivel {
+    background-color: #ffcc00;
+    border: 4px solid #000000;
+    border-radius: 20px;
+    color: #000000;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 45px 10px;
+    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0 8px 0px #b28f00;
+}
+
+.btn-acessivel:active {
+    transform: translateY(4px);
+    box-shadow: 0 4px 0px #b28f00;
+}
+
+.btn-acessivel:hover {
+    background-color: #ffe066;
+    color: #000;
+}
+
+.btn-acessivel img {
+    width: 70px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.btn-text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* INSUMOS */
+/* Card Estilo "Botão Forte" */
+.insumo-card {
+    border: 4px solid #000000;
+    border-radius: 25px;
+    background-color: #ffffff;
+    transition: transform 0.2s;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: 8px 8px 0px #e0e0e0;
+}
+
+/* Área da Imagem */
+.insumo-img-container {
+    height: 160px;
+    background-color: #f1f1f1;
+    border-bottom: 4px solid #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.insumo-img-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* Texto e Números */
+.insumo-nome {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #000;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.insumo-quantidade {
+    background-color: #ffcc00;
+    border: 3px solid #000;
+    border-radius: 15px;
+    display: inline-block;
+    padding: 5px 20px;
+    margin: 10px 0;
+    font-size: 2rem;
+    font-weight: 900;
+    color: #000;
+}
+
+.insumo-unidade {
+    font-size: 1rem;
+    font-weight: 700;
+    display: block;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+/* Grid que tenta se manter compacto */
+.row-insumos {
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* PRODUÇÃO */
+.btn-produzir-topo {
+    background-color: #28a745;
+    width: 1080px;
+    color: white;
+    font-weight: 900;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    padding: 15px 40px;
+    text-transform: uppercase;
+    box-shadow: 6px 6px 0px #000;
+}
+
+.section-header {
+    background-color: #333;
+    color: #ffcc00;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-top: 30px;
+    border: 3px solid #000;
+}
+
+/* Card de Produção Pendente */
+.card-pendente {
+    border: 4px solid #000;
+    border-radius: 20px;
+    background-color: #fff;
+    margin-bottom: 15px;
+    padding: 15px;
+    transition: transform 0.2s;
+    box-shadow: 6px 6px 0px #ddd;
+}
+
+.prod-img {
+    border: 3px solid #000;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.info-principal {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #000;
+}
+
+.info-detalhe {
+    font-size: 1.1rem;
+    color: #444;
+    font-weight: 600;
+}
+
+.btn-finalizar {
+    background-color: #ffcc00;
+    color: #000;
+    border: 3px solid #000;
+    font-weight: 900;
+    font-size: 1.2rem;
+    border-radius: 12px;
+    padding: 10px 25px;
+    text-transform: uppercase;
+    box-shadow: 4px 4px 0px #000;
+}
+
+/* Card de Produção Finalizada */
+.card-finalizada {
+    border: 2px solid #ccc;
+    border-radius: 15px;
+    background-color: #f8f9fa;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    opacity: 0.8;
+}
+
+.scroll-area {
+    max-height: 65vh;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* PROUÇÃO NOVA */
+.receita-card-escolha {
+    border: 4px solid #000;
+    border-radius: 25px;
+    background-color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: 6px 6px 0px #ccc;
+}
+
+.receita-card-escolha:hover {
+    transform: translateY(-5px);
+    box-shadow: 10px 10px 0px #ffcc00;
+}
+
+.img-previa {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 4px solid #000;
+    background-color: #f8f9fa;
+}
+
+.receita-titulo {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #000;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+.lote-label {
+    font-weight: 800;
+    color: #004a99;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Input de Quantidade Robusto */
+.input-lote-container {
+    border: 3px solid #000;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.input-lote-texto {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+}
+
+.input-lote-campo {
+    border: none !important;
+    font-size: 1.5rem !important;
+    font-weight: 900 !important;
+    text-align: center;
+    background-color: #fff9e6;
+}
+
+.btn-iniciar-grande {
+    background-color: #28a745;
+    color: white;
+    border: 3px solid #000;
+    font-weight: 900;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    padding: 12px;
+    border-radius: 15px;
+    box-shadow: 0 4px 0 #155724;
+}
+
+.btn-iniciar-grande:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+/* PRODUÇÃO FINALIZADA DETALHE */
+.finalizar-card {
+    border: 4px solid #000;
+    border-radius: 25px;
+    background-color: #fff;
+    overflow: hidden;
+    box-shadow: 10px 10px 0px #eee;
+}
+
+.finalizar-header {
+    background-color: #ffcc00;
+    border-bottom: 4px solid #000;
+    padding: 20px;
+    text-align: center;
+}
+
+.info-box {
+    background-color: #f8f9fa;
+    border: 2px solid #000;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.label-grande {
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #004a99;
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Input de Quantidade Gigante */
+.input-final-group {
+    display: flex;
+    border: 4px solid #000;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.input-unidade {
+    background-color: #004a99;
+    color: #ffcc00;
+    padding: 15px;
+    font-weight: 900;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    min-width: 100px;
+    justify-content: center;
+}
+
+.input-campo-final {
+    border: none !important;
+    font-size: 2rem !important;
+    font-weight: 900 !important;
+    text-align: center;
+    background-color: #fff;
+}
+
+.alerta-estoque {
+    background-color: #fff3cd;
+    border-left: 5px solid #ffcc00;
+    padding: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+}
+
+.btn-confirmar {
+    background-color: #28a745;
+    color: white;
+    border: 4px solid #000;
+    font-weight: 900;
+    font-size: 1.5rem;
+    padding: 20px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    box-shadow: 0 6px 0 #155724;
+}
+
+.btn-confirmar:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+/* RECEITAS */
+.receita-card {
+    border: 4px solid #000;
+    border-radius: 25px;
+    background-color: #fff;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: 8px 8px 0px #eee;
+    transition: transform 0.2s;
+}
+
+.receita-img-box {
+    background-color: #f1f1f1;
+    border-right: 4px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.receita-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.receita-nome {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #004a99;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.receita-produto {
+    background-color: #e9ecef;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.ingrediente-lista {
+    background-color: #fff9e6;
+    border: 2px solid #ffcc00;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.ingrediente-item {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #000;
+    padding: 10px 0;
+    border-bottom: 1px dashed #ccc;
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+}
+
+.ingrediente-item:last-child {
+    border-bottom: none;
+}
+
+.check-icon {
+    color: #28a745;
+    font-size: 1.2rem;
+    margin-right: 12px;
+    margin-top: 2px;
+}
+
+.qtd-tecnica {
+    font-weight: 800;
+    color: #000;
+    background-color: #f0e6cc;
+    padding: 2px 6px;
+    border-radius: 5px;
+}
+
+.medida-caseira {
+    color: #d63384;
+    font-weight: 800;
+    margin-left: 5px;
+}
+
+/* RELATORIOS */
+.filtro-container {
+    border: 4px solid #000;
+    border-radius: 20px;
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 6px 6px 0px #eee;
+}
+
+.form-label {
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #004a99;
+    font-size: 1.1rem;
+}
+
+.form-control-lg {
+    border: 3px solid #000 !important;
+    font-weight: 700;
+}
+
+.btn-buscar {
+    background-color: #ffcc00;
+    color: #000;
+    border: 3px solid #000;
+    font-weight: 900;
+    font-size: 1.2rem;
+    height: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 0 #000;
+}
+
+/* Abas Gigantes */
+.nav-tabs {
+    border-bottom: 4px solid #000;
+    gap: 10px;
+}
+
+.nav-link {
+    border: 4px solid #000 !important;
+    border-bottom: none !important;
+    border-radius: 15px 15px 0 0 !important;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    color: #333 !important;
+    padding: 12px 30px !important;
+    background-color: #e9ecef !important;
+}
+
+.nav-link.active {
+    background-color: #ffcc00 !important;
+    color: #000 !important;
+    padding-bottom: 15px !important;
+}
+
+.status-badge {
+    padding: 8px 15px;
+    border-radius: 10px;
+    border: 2px solid #000;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.scroll-relatorio {
+    max-height: 55vh;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+/* VENDA */
+.produto-card {
+    border: 4px solid #000;
+    border-radius: 20px;
+    overflow: hidden;
+    background: white;
+    height: 100%;
+    box-shadow: 5px 5px 0px #eee;
+}
+
+.produto-img {
+    height: 160px;
+    object-fit: cover;
+    border-bottom: 4px solid #000;
+}
+
+.produto-nome {
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.produto-preco {
+    font-size: 1.6rem;
+    color: #28a745;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.btn-add-venda {
+    background-color: #ffcc00;
+    color: #000;
+    border: 3px solid #000;
+    font-weight: 900;
+    font-size: 1.1rem;
+    border-radius: 15px;
+    padding: 12px;
+    box-shadow: 0 4px 0 #000;
+}
+
+.btn-add-venda:active {
+    transform: translateY(3px);
+    box-shadow: none;
+}
+
+.carrinho-caixa {
+    border: 4px solid #000;
+    border-radius: 25px;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.total-caixa {
+    background-color: #004a99;
+    color: #ffcc00;
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    border: 3px solid #000;
+}
+
+.btn-controles {
+    width: 45px;
+    height: 45px;
+    font-weight: 900;
+    font-size: 1.2rem;
+    border: 2px solid #000;
+    border-radius: 10px;
+}

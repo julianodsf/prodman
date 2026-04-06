@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    /* ── TÍTULO CENTRALIZADO ── */
+    .titulo-pagina {
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    .titulo-pagina .page-title {
+        display: inline-block;
+    }
+
+    /* ── BOTÃO VOLTAR ABAIXO À ESQUERDA ── */
+    .btn-voltar-linha {
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-voltar-linha a {
+        background-color: #ffcc00;
+        display: inline-block;
+        font-weight: 800;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #000;
+        border: 3px solid #000;
+        box-shadow: 5px 5px 0px #000;
+        font-size: 1rem;
+    }
+
+    /* ── CARDS ── */
+    .insumo-card {
+        border: 4px solid #000;
+        border-radius: 20px;
+        background-color: #fff;
+        overflow: hidden;
+        height: 100%;
+        box-shadow: 6px 6px 0px #e0e0e0;
+    }
+
+    .insumo-img-container {
+        height: 130px;
+        background-color: #f1f1f1;
+        border-bottom: 4px solid #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .insumo-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .insumo-nome {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #000;
+        margin-top: 8px;
+        text-transform: uppercase;
+    }
+
+    .insumo-quantidade {
+        background-color: #ffcc00;
+        border: 3px solid #000;
+        border-radius: 12px;
+        display: inline-block;
+        padding: 4px 16px;
+        margin: 6px 0;
+        font-size: 1.6rem;
+        font-weight: 900;
+        color: #000;
+    }
+
+    .insumo-unidade {
+        font-size: 0.9rem;
+        font-weight: 700;
+        display: block;
+        color: #444;
+        margin-bottom: 8px;
+    }
+
+    /* ── CELULAR ── */
+    @media (max-width: 600px) {
+        .titulo-pagina .page-title {
+            font-size: 1.6rem !important;
+            padding: 10px 20px !important;
+        }
+
+        .btn-voltar-linha a {
+            font-size: 0.75rem !important;
+            padding: 6px 12px !important;
+            box-shadow: 3px 3px 0px #000 !important;
+            border-width: 2px !important;
+        }
+
+        .row-insumos > div {
+            width: 50% !important;
+            flex: 0 0 50% !important;
+            max-width: 50% !important;
+            padding: 5px !important;
+        }
+
+        .insumo-card {
+            border-width: 3px;
+            border-radius: 14px;
+        }
+
+        .insumo-img-container {
+            height: 90px;
+            border-bottom-width: 3px;
+        }
+
+        .card-body {
+            padding: 6px !important;
+        }
+        .alert h3 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .alert p {
+            font-size: 0.8rem;
+            margin: 0;
+        }
+
+        .alert {
+            padding: 16px 12px !important;
+        }
+
+        .insumo-nome { font-size: 0.8rem; margin-top: 4px; }
+        .insumo-quantidade { font-size: 1.2rem; padding: 2px 10px; margin: 4px 0; }
+        .insumo-unidade { font-size: 0.75rem; margin-bottom: 4px; }
+    }
+</style>
+
+<!-- TÍTULO CENTRALIZADO -->
+<div class="titulo-pagina">
+    <h2 class="page-title m-0">📦 Estoque de Insumos</h2>
+</div>
+
+<!-- VOLTAR ABAIXO À ESQUERDA -->
+<div class="btn-voltar-linha">
+    <a href="{% url 'home' %}">⬅ VOLTAR</a>
+</div>
+
+<!-- CARDS -->
+<div class="row row-insumos g-3">
+    {% for insumo in insumos %}
+    <div class="col-xl-3 col-lg-4 col-md-6 col-6">
+        <div class="insumo-card text-center">
+            <div class="insumo-img-container">
+                {% if insumo.imagem %}
+                    <img src="{{ insumo.imagem.url }}" alt="{{ insumo.nome_insumo }}">
+                {% else %}
+                    <div class="p-3">
+                        <span class="fw-bold text-muted">SEM FOTO</span>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-body p-3">
+                <div class="insumo-nome">{{ insumo.nome_insumo }}</div>
+                <div class="insumo-quantidade">{{ insumo.qtd_disponivel }}</div>
+                <span class="insumo-unidade">{{ insumo.und_medida }}</span>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <div class="alert alert-warning border-dark text-center fw-bold">
+            <h3>NENHUM INSUMO CADASTRADO.</h3>
+            <p class="mb-0">Por favor, adicione novos itens ao estoque.</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

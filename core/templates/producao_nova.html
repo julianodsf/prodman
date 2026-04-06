@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="text-center">
+    <h2 class="page-title">➕ Iniciar Produção</h2>
+    <p class="fw-bold text-muted mt-n2">Escolha o que você vai cozinhar agora:</p>
+</div>
+
+<div class="scroll-area">
+    <div class="row g-4">
+        {% for receita in receitas %}
+        <div class="col-md-6 col-lg-4">
+            <div class="receita-card-escolha">
+                {% if receita.imagem %}
+                    <img src="{{ receita.imagem.url }}" class="img-previa">
+                {% else %}
+                    <div class="img-previa d-flex align-items-center justify-content-center text-muted fw-bold">SEM FOTO</div>
+                {% endif %}
+                
+                <div class="card-body p-4 text-center">
+                    <h5 class="receita-titulo">{{ receita.nome_receita }}</h5>
+                    <p class="text-muted fw-bold mb-3">📦 Faz: {{ receita.produto.nome_produto }}</p>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="receita_id" value="{{ receita.id_receita }}">
+                        
+                        <label class="lote-label">Quantas vezes a receita?</label>
+                        <div class="input-lote-container">
+                            <span class="input-lote-texto">LOTES:</span>
+                            <input type="number" name="qtd_batches" class="form-control input-lote-campo" value="1" min="1" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-iniciar-grande w-100">
+                            👨‍🍳 COMEÇAR AGORA
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="position-fixed bottom-0 end-0 m-4">
+    <a href="{% url 'producao_list' %}" class="btn btn-dark btn-lg border-warning p-3 px-4 fw-bold shadow">
+        ⬅ VOLTAR
+    </a>
+</div>
+{% endblock %}

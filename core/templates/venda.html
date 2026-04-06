@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="text-center">
+            <h2 class="page-title">🍪 Escolha os Biscoitos</h2>
+        </div>
+        
+        <div class="row g-3">
+            {% for produto in produtos %}
+            <div class="col-6 col-lg-4">
+                <div class="produto-card text-center">
+                    {% if produto.imagem %}
+                        <img src="{{ produto.imagem.url }}" class="w-100 produto-img">
+                    {% else %}
+                        <div class="produto-img bg-light d-flex align-items-center justify-content-center fw-bold">SEM FOTO</div>
+                    {% endif %}
+                    
+                    <div class="p-3">
+                        <div class="produto-nome">{{ produto.nome_produto }}</div>
+                        <div class="produto-preco">R$ {{ produto.preco_unitario }}</div>
+                        
+                        <button type="button" class="btn btn-add-venda w-100 btn-adicionar" 
+                                data-id="{{ produto.id_produto }}" data-nome="{{ produto.nome_produto }}" 
+                                data-preco="{{ produto.preco_unitario|stringformat:'.2f' }}"
+                                {% if produto.qtd_disponivel <= 0 %}disabled{% endif %}>
+                            {% if produto.qtd_disponivel > 0 %}➕ ADICIONAR{% else %}ESGOTADO{% endif %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="carrinho-caixa sticky-top" style="top: 20px;">
+            <h3 class="fw-black text-center border-bottom border-dark pb-3">🛒 VENDA</h3>
+            
+            <div id="cart-list" class="my-4" style="max-height: 350px; overflow-y: auto;">
+                <p class="text-center text-muted fw-bold">Carrinho vazio</p>
+            </div>
+
+            <div class="total-caixa mb-4">
+                <div class="fw-bold text-uppercase">Total a Pagar:</div>
+                <div class="display-6 fw-black">R$ <span id="cart-total">0.00</span></div>
+            </div>
+
+            <div class="mb-3">
+    <label class="fw-bold">Forma de Pagamento:</label>
+    <select id="metodo_pagamento" class="form-select border-2 border-dark" onchange="togglePix()">
+        <option value="DINHEIRO">💵 Dinheiro</option>
+        <option value="PIX">💎 Pix</option>
+    </select>
+</div>
+
+<div id="pix-qr-container" class="text-center p-3 mb-3 border border-success rounded bg-light" style="display: none;">
+    <p class="small fw-bold mb-1">Escaneie para pagar via PIX:</p>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=SUA_CHAVE_PIX_AQUI" alt="QR Code Pix" class="img-fluid mb-2">
+    <p class="small mb-0">Chave: <strong>seu-email@pix.com</strong></p>
+</div>
+
+            <button onclick="finalizeSale()" class="btn btn-confirmar w-100 mb-3">✔️ VENDER</button>
+            <a href="{% url 'home' %}" class="btn btn-outline-dark w-100 fw-bold border-3 bg-danger">CANCELAR</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    let cart = {};
+
+    function updateCartUI() {
+        const list = document.getElementById('cart-list');
+        const totalSpan = document.getElementById('cart-total');
+        let total = 0;
+        
+        list.innerHTML = '';
+        if (Object.keys(cart).length === 0) {
+            list.innerHTML = '<p class="text-center text-muted fw-bold py-4">Carrinho vazio</p>';
+        } else {
+            for (let id in cart) {
+                let item = cart[id];
+                total += item.price * item.qty;
+                list.innerHTML += `
+                    <div class="border-bottom border-dark pb-3 mb-3">
+                        <div class="fw-bold text-uppercase fs-5 mb-2">${item.name}</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button class="btn btn-danger btn-controles" onclick="removeFromCart(${id})">-</button>
+                                <span class="px-3 fs-4 fw-black">${item.qty}</span>
+                                <button class="btn btn-success btn-controles" onclick="addToCart(${id}, '${item.name}', ${item.price})">+</button>
+                            </div>
+                            <div class="text-end fw-black text-success fs-5">R$ ${(item.price * item.qty).toFixed(2)}</div>
+                        </div>
+                    </div>`;
+            }
+        }
+        totalSpan.innerText = total.toFixed(2);
+    }
+
+    function addToCart(id, name, price) {
+        if (!cart[id]) cart[id] = { name: name, price: price, qty: 0 };
+        cart[id].qty++;
+        updateCartUI();
+    }
+
+    function removeFromCart(id) {
+        if (cart[id] && cart[id].qty > 0) {
+            cart[id].qty--;
+            if (cart[id].qty === 0) delete cart[id];
+        }
+        updateCartUI();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll('.btn-adicionar').forEach(btn => {
+            btn.onclick = () => addToCart(btn.dataset.id, btn.dataset.nome, parseFloat(btn.dataset.preco));
+        });
+    });
+
+    function togglePix() {
+        const metodo = document.getElementById('metodo_pagamento').value;
+        const container = document.getElementById('pix-qr-container');
+        container.style.display = (metodo === 'PIX') ? 'block' : 'none';
+    }
+
+    function finalizeSale() {
+    if (Object.keys(cart).length === 0) return alert('O carrinho está vazio!');
+    
+    const metodo = document.getElementById('metodo_pagamento').value;
+    if (!confirm(`Confirmar venda no ${metodo}?`)) return;
+
+    let cartArray = Object.keys(cart).map(id => ({ id: id, qty: cart[id].qty }));
+    
+    fetch("{% url 'venda_view' %}", {
+        method: "POST",
+        headers: { 
+            'Content-Type': 'application/json', 
+            'X-CSRFToken': '{{ csrf_token }}' 
+        },
+        body: JSON.stringify({ 
+            'carrinho': cartArray,
+            'metodo_pagamento': metodo // Enviando o método escolhido
+        })
+    })
+    .then(res => res.ok ? (alert('Venda feita com sucesso!'), location.reload()) : res.json().then(d => {throw d}))
+    .catch(e => alert('Erro: ' + e.message));
+}
+</script>
+{% endblock %}
